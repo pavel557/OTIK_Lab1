@@ -19,9 +19,10 @@ namespace Lab1
                 fstream.Read(buffer);
             }
 
+            //проверка сигнатуры
             int i = 0;
-            byte[] signature = new byte[4];
             int edge = newHeader.Signature.Length;
+            byte[] signature = new byte[edge];
             for (int j = 0; i < edge && i < buffer.Length; i++, j++)
             {
                 signature[j] = buffer[i];
@@ -72,13 +73,12 @@ namespace Lab1
             }
             for (int j = 0; i < buffer.Length; i++, j++)
             {
-                data[j] = buffer[i];
+                data[j] = buffer[i]; //преобразование Y -> ~X
             }
 
             using (FileStream fstream = new FileStream(pathWrite, FileMode.OpenOrCreate))
             {
                 // запись массива байтов в файл
-                Header header = new Header(buffer.Length);
                 fstream.Write(data);
 
                 Console.WriteLine("Раскодировано");
