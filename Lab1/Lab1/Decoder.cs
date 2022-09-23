@@ -6,7 +6,7 @@ namespace Lab1
 {
     class Decoder
     {
-        public void Decode(string pathRead, string pathWrite)
+        public void Decode(string pathRead, string folderPathWrite)
         {
             byte[] buffer;
             Header newHeader = new Header();
@@ -64,25 +64,47 @@ namespace Lab1
                 fileLength[j] = buffer[i];
             }
 
-            int fileLengthInt = BitConverter.ToInt32(fileLength, 0);
-            byte[] data = new byte[fileLengthInt];
-            if (fileLengthInt != buffer.Length - edge)
+            //int fileLengthInt = BitConverter.ToInt32(fileLength, 0);
+            //if (fileLengthInt != buffer.Length - edge)
+            //{
+            //    Console.WriteLine("Размер файла не совпадает");
+            //    return;
+            //}
+
+
+            while (i < buffer.Length)
             {
-                Console.WriteLine("Размер файла не совпадает");
-                return;
-            }
-            for (int j = 0; i < buffer.Length; i++, j++)
-            {
-                data[j] = buffer[i]; //преобразование Y -> ~X
+                //ex: 7asd.txt10aaaaaaaaaa
+
+                byte[] nameLenInBytes = new byte[4];
+                for (int b = 0; b < 4; b++, i++)
+                    nameLenInBytes[b] = buffer[i];
+                int nameLen = BitConverter.ToInt32(nameLenInBytes);//7
+
+                byte[] nameInBytes = new byte[nameLen];
+                for (int b = 0; b < nameLen; b++, i++)
+                    nameInBytes[b] = buffer[i];
+                string fName = Encoding.UTF8.GetString(nameInBytes);//asd.txt
+
+                byte[] fileBufferBytesCount = new byte[4];
+                for (int b = 0; b < 4; b++, i++)
+                    fileBufferBytesCount[b] = buffer[i];
+                int fileBufferLen = BitConverter.ToInt32(fileBufferBytesCount);//10
+
+                byte[] fileBuffer = new byte[fileBufferLen];
+                for (int b = 0; b < fileBufferLen; b++, i++)
+                    fileBuffer[b] = buffer[i];//aaaaaaaaaa
+
+                //"C:\Users\123m\source\repos\OTIK_Lab1\Lab1\Lab1\bin\Debug\netcoreapp3.1\files\
+                //MinecraftEdu1.pdf
+                Directory.CreateDirectory(folderPathWrite);
+                string fullFilePath = folderPathWrite + "\\" + fName;
+                //C:\Users\123m\source\repos\OTIK_Lab1\Lab1\Lab1\bin\Debug\netcoreapp3.1\files\MinecraftEdu1.pdf
+
+                File.WriteAllBytes(fullFilePath, fileBuffer);
             }
 
-            using (FileStream fstream = new FileStream(pathWrite, FileMode.OpenOrCreate))
-            {
-                // запись массива байтов в файл
-                fstream.Write(data);
-
-                Console.WriteLine("Раскодировано");
-            }
+            Console.WriteLine("Раскодировано");
         }
     }
 }

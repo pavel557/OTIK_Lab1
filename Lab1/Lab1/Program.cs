@@ -13,10 +13,10 @@ namespace Lab1
         }
 
         static (string pathRead, string pathWrite) GetFileNames()
-        {
-            Console.WriteLine("Enter the file name to read: ");
+        {//При шифровании pathRead - путь до папки, а при дешифровке это название файла и наоборот
+            Console.WriteLine("Enter the path name to read: ");
             string pathRead = Console.ReadLine();
-            Console.WriteLine("Enter the file name to write: ");
+            Console.WriteLine("Enter the path name to write: ");
             string pathWrite = Console.ReadLine();
 
             return (pathRead, pathWrite);
