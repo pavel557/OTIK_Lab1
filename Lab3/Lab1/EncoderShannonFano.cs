@@ -199,7 +199,19 @@ namespace Lab1
                     //Записываем это назване перед файлом
                     fstream.Write(fileNameInbytes);
 
+                    //если не нужно кодировать
+                    if(AllFileBytes[i].Count >= filesBuffers[i].Count)
+                    {
+                        fstream.Write(new byte[1] { 0x0 });
+                        fstream.Write(BitConverter.GetBytes(filesBuffers[i].Count));
+                        fstream.Write(filesBuffers[i].ToArray());
+                        continue;
+                    }
+                    //говорим, что нужно декодировать
+                    fstream.Write(new byte[1] { 0x1 });
                     byte[] buffer = AllFileBytes[i].ToArray();
+                    //записываем дилну данных
+                    fstream.Write(BitConverter.GetBytes(buffer.Length));
                     //Записываем буфер файла
                     fstream.Write(buffer);
                 }

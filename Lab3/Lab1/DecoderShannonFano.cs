@@ -26,6 +26,28 @@ namespace Lab1
                     nameInBytes[b] = buffer[i];
                 string fName = Encoding.UTF8.GetString(nameInBytes);//asd.txt
 
+                //проверяем, нужно ли декодировать
+                byte needDecodeByte = buffer[i];
+                i++;
+                int intLen = sizeof(int);
+                byte[] dataLenInBytes = new byte[intLen];
+                for (int b = 0; b < intLen; b++, i++)
+                    dataLenInBytes[b] = buffer[i];
+                int dataLen = BitConverter.ToInt32(dataLenInBytes);
+
+                if (needDecodeByte != 0x1)
+                {
+                    Directory.CreateDirectory(folderPathWrite);
+                    string fullFilePath2 = folderPathWrite + "\\" + fName;
+
+                    byte[] rawData = new byte[dataLen];
+                    for (int b = 0; b < dataLen; b++, i++)
+                        rawData[b] = buffer[i];
+
+                    File.WriteAllBytes(fullFilePath2, rawData);
+                    continue;
+                }
+
                 //количество записей в таблице
                 byte[] countTableElements = new byte[4];
                 for (int b = 0; b < 4; b++, i++)
