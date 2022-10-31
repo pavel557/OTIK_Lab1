@@ -12,23 +12,27 @@ namespace Lab1
         public byte[] CompressionAndProtectionAlgorithmCode = { (byte)EncodingType.None };
         public int FileLength = 0;
 
+        public int HeaderStructSize;
+
         public Header()
         {
-
+            HeaderStructSize = Signature.Length
+                + sizeof(int) + CompressionAndProtectionAlgorithmCode.Length
+                + sizeof(int);
         }
 
-        public Header(int fileLength)
+        public Header(int fileLength) : this()
         {
             FileLength = fileLength;
         }
 
-        public Header(int formatVersion, byte[] compressionAndProtectionAlgorithmCode)
+        public Header(int formatVersion, byte[] compressionAndProtectionAlgorithmCode) : this()
         {
             FormatVersion = formatVersion;
             CompressionAndProtectionAlgorithmCode = compressionAndProtectionAlgorithmCode;
         }
 
-        public Header(int formatVersion, byte[] compressionAndProtectionAlgorithmCode, int fileLength)
+        public Header(int formatVersion, byte[] compressionAndProtectionAlgorithmCode, int fileLength) : this()
         {
             FormatVersion = formatVersion;
             CompressionAndProtectionAlgorithmCode = compressionAndProtectionAlgorithmCode;
@@ -104,7 +108,8 @@ namespace Lab1
         {
             None = 0x00,
             ShenonFano = 0x01,
-            RLE = 0x02
+            RLE = 0x02,
+            DoubleEncode = 0x03
         }
     }
 

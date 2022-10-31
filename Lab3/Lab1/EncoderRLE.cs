@@ -170,7 +170,7 @@ namespace Lab1
                     fstream.Write(buffer);
                 }
 
-                Console.WriteLine("Закодировано");
+                Console.WriteLine("RLE Закодировано");
             }
         }
     }

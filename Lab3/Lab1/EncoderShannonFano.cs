@@ -8,7 +8,7 @@ namespace Lab1
 {
     class EncoderShannonFano
     {
-        public void Encode(string folderPathRead, string pathWrite)
+        public void Encode(string folderPathRead, string pathWrite, int skeepFirstBytes = -1)
         {
             //Берем все файлы из папки
             List<string> files = Directory.EnumerateFiles(folderPathRead).ToList();
@@ -23,7 +23,7 @@ namespace Lab1
                     // выделяем массив для считывания данных из файла
                     // считываем данные
                     fstream.Read(fileBuffersАrray);
-                    filesBuffers.Add(fileBuffersАrray.ToList<byte>());
+                    filesBuffers.Add(fileBuffersАrray.Skip(skeepFirstBytes).ToList<byte>());
                 }
             }
 
@@ -216,7 +216,7 @@ namespace Lab1
                     fstream.Write(buffer);
                 }
 
-                Console.WriteLine("Закодировано");
+                Console.WriteLine("Shannon Fano Закодировано");
             }
         }
 

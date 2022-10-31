@@ -12,7 +12,8 @@ namespace Lab1
                 "1-encode file simpe\n" +
                 "2-encode file shenon fano\n" +
                 "3-encode file RLE\n" +
-                "4-decode file\n");
+                "4-encode file double encoding\n" +
+                "5-decode file\n");
             Console.WriteLine("---------------------------------------------------");
             return Convert.ToInt32(Console.ReadLine());
         }
@@ -55,6 +56,12 @@ namespace Lab1
                         RLEencoder.Encode(pathRead, pathWrite);
                         break;
                     case 4:
+                        Console.WriteLine("Double encoding...");
+                        (pathRead, pathWrite) = GetFileNames();
+                        DoubleEncoder doubleEncoder = new DoubleEncoder();
+                        doubleEncoder.Encode(pathRead, pathWrite);
+                        break;
+                    case 5:
                         Console.WriteLine("Decoding...");
                         (pathRead, pathWrite) = GetFileNames();
 
@@ -81,6 +88,9 @@ namespace Lab1
                                 break;
                             case Header.EncodingType.RLE:
                                 decoder = new DecoderRLE();
+                                break;
+                            case Header.EncodingType.DoubleEncode:
+                                decoder = new DoubleDecoder();
                                 break;
                         }
                         decoder.Decode(pathRead, pathWrite, dataStartPosition);
