@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Lab1
 {
@@ -8,7 +7,11 @@ namespace Lab1
         static int ChooseComand()
         {
             Console.WriteLine("Choose operation:\n");
-            Console.WriteLine("0-exit from program\n1-encode file\n2-decode file\n");
+            Console.WriteLine(
+                "0-exit from program\n" +
+                "1-encode file simpe\n" +
+                "2-encode file shenon fano\n" +
+                "3-decode file\n");
             Console.WriteLine("---------------------------------------------------");
             return Convert.ToInt32(Console.ReadLine());
         }
@@ -33,16 +36,44 @@ namespace Lab1
                         Environment.Exit(0);
                         break;
                     case 1:
-                        Console.WriteLine("Encoding...");
+                        Console.WriteLine("Simple encoding...");
                         var (pathRead, pathWrite) = GetFileNames();
-                        EncoderShannonFano encoder = new EncoderShannonFano();
+                        Encoder encoder = new Encoder();
                         encoder.Encode(pathRead, pathWrite);
                         break;
                     case 2:
+                        Console.WriteLine("ShenonFano encoding...");
+                        (pathRead, pathWrite) = GetFileNames();
+                        EncoderShannonFano SFencoder = new EncoderShannonFano();
+                        SFencoder.Encode(pathRead, pathWrite);
+                        break;
+                    case 3:
                         Console.WriteLine("Decoding...");
                         (pathRead, pathWrite) = GetFileNames();
-                        DecoderShannonFano decoder = new DecoderShannonFano();
-                        decoder.Decode(pathRead, pathWrite);
+
+                        Header header = Header.GetHeader(pathRead, out int dataStartPosition);
+                        if(header is null)
+                        {
+                            Console.WriteLine("Ошибка чтения хедера.");
+                            break;
+                        }
+                        if(header.CompressionAndProtectionAlgorithmCode.Length < 1)
+                        {
+                            Console.WriteLine("Неверный формат кода алгоритма в хедере файла!");
+                            break;
+                        }
+
+                        IDecoder decoder = null;
+                        switch ((Header.EncodingType)header.CompressionAndProtectionAlgorithmCode[0])
+                        {
+                            case Header.EncodingType.None:
+                                decoder = new Decoder();
+                                break;
+                            case Header.EncodingType.ShenonFano:
+                                decoder = new DecoderShannonFano();
+                                break;
+                        }
+                        decoder.Decode(pathRead, pathWrite, dataStartPosition);
                         break;
                     default:
                         break;

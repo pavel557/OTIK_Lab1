@@ -183,7 +183,7 @@ namespace Lab1
             {
                 int totalLength = AllFileBytes.Sum(b => b.Count);
 
-                Header header = new Header(2, new byte[1] { 0x01 }, totalLength);
+                Header header = new Header(2, new byte[1] { (byte)Header.EncodingType.ShenonFano }, totalLength);
                 fstream.Write(header.Signature);
                 fstream.Write(BitConverter.GetBytes(header.FormatVersion));
                 fstream.Write(header.CompressionAndProtectionAlgorithmCode);
