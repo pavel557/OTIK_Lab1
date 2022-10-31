@@ -11,7 +11,8 @@ namespace Lab1
                 "0-exit from program\n" +
                 "1-encode file simpe\n" +
                 "2-encode file shenon fano\n" +
-                "3-decode file\n");
+                "3-encode file RLE\n" +
+                "4-decode file\n");
             Console.WriteLine("---------------------------------------------------");
             return Convert.ToInt32(Console.ReadLine());
         }
@@ -48,6 +49,12 @@ namespace Lab1
                         SFencoder.Encode(pathRead, pathWrite);
                         break;
                     case 3:
+                        Console.WriteLine("RLE encoding...");
+                        (pathRead, pathWrite) = GetFileNames();
+                        EncoderRLE RLEencoder = new EncoderRLE();
+                        RLEencoder.Encode(pathRead, pathWrite);
+                        break;
+                    case 4:
                         Console.WriteLine("Decoding...");
                         (pathRead, pathWrite) = GetFileNames();
 
@@ -71,6 +78,9 @@ namespace Lab1
                                 break;
                             case Header.EncodingType.ShenonFano:
                                 decoder = new DecoderShannonFano();
+                                break;
+                            case Header.EncodingType.RLE:
+                                decoder = new DecoderRLE();
                                 break;
                         }
                         decoder.Decode(pathRead, pathWrite, dataStartPosition);

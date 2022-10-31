@@ -103,7 +103,8 @@ namespace Lab1
         public enum EncodingType : byte
         {
             None = 0x00,
-            ShenonFano = 0x01
+            ShenonFano = 0x01,
+            RLE = 0x02
         }
     }
 

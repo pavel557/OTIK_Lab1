@@ -147,7 +147,7 @@ namespace Lab1
             {
                 int totalLength = newFilesBytes.Sum(b => b.Count);
 
-                Header header = new Header(totalLength);
+                Header header = new Header(2, new byte[1] { (byte)Header.EncodingType.RLE }, totalLength);
                 fstream.Write(header.Signature);
                 fstream.Write(BitConverter.GetBytes(header.FormatVersion));
                 fstream.Write(header.CompressionAndProtectionAlgorithmCode);

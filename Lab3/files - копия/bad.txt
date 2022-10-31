@@ -1,2 +1,0 @@
-List<int> LeftFrequency = new List<int>();
-qwertyuiop[]asdfghjkl;'zxcvbn,nm,
